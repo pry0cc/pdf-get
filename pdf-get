@@ -7,6 +7,10 @@ from bs4 import BeautifulSoup
 #parser.add_argument('book_name', metavar='Book', type=str,
 #                    help='da book to get')
 
+def print_results(result_list):
+    for result in result_list:
+        print result.a.text
+
 
 class Library(object):
     def __init__(self):
