@@ -50,6 +50,7 @@ class Library(object):
     def print_results(self, results):
         results_sorted = sorted(results, key=lambda k: k["year"])[::-1]
 
+        print("%-4s %-70s %4s" % ("ID", "Title", "Year"))
         for item in results_sorted:
             item_id = "(%s)" % (str(results_sorted.index(item)))
             print("%-4s %-70s %4s" % (item_id, item["title"][0:69], item["year"]))
