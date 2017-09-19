@@ -52,6 +52,6 @@ class Library(object):
 
         for item in results_sorted:
             item_id = "(%s)" % (str(results_sorted.index(item)))
-            print("%-4s %-70s" % (item_id, item["title"][0:69]), item["year"])
+            print("%-4s %-70s %4s" % (item_id, item["title"][0:69], item["year"]))
 
 lib = Library("Art of Exploitation")
