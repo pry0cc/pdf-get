@@ -55,7 +55,15 @@ class Library(object):
             file.write(response.content)
 
 
+
     def print_results(self, results):
+
+        def separator(length):
+            for i in range(0,length):
+                sys.stdout.write("-")
+                sys.stdout.flush()
+            print("")
+
         results_sorted = sorted(results, key=lambda k: k["year"])[::-1]
 
         banner = "%-4s %-70s %4s %8s  %-10s %5s" % ("ID", "Title", "Year", "Size", "Language", "Ext")
@@ -64,15 +72,10 @@ class Library(object):
         # print(len(banner) - 70)
 
         print(banner)
-
-        for i in range(0,len(banner)):
-            sys.stdout.write("-")
-            sys.stdout.flush()
-        print("")
-        
+        separator(len(banner))
         for item in results_sorted:
             item_id = "(%s)" % (str(results_sorted.index(item)))
             print("%-4s %-70s %4s %8s  %-10s %5s" % (item_id, item["title"][0:69], item["year"],
             item["size"], item["language"], item["extension"]))
-
+        separator(len(banner))
 lib = Library("Art of Exploitation")
