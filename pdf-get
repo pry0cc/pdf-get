@@ -1,6 +1,11 @@
 #!/usr/bin/env python3
-
+import argparse as argp
 import requests
+
+parser = argp.ArgumentParser(description='Get some bookz')
+parser.add_argument('book_name', metavar='Book', type=string, nargs='+',
+                    help='da book to get')
+
 
 class Library(object):
     def __init__(self):
