@@ -4,7 +4,7 @@ import requests
 from bs4 import BeautifulSoup
 
 parser = argp.ArgumentParser(description='Get some bookz')
-parser.add_argument('book_name', metavar='Book', type=string, nargs='+',
+parser.add_argument('book_name', metavar='Book', type=str,
                     help='da book to get')
 
 
@@ -20,7 +20,7 @@ class Library(object):
         results = []
 
         for tr in tr_list:
-            print(tr.find_all("td")[2])
+            print(str(tr.find_all("td")[2]))
 
 lib = Library()
 lib.search("Art of Exploitation")
