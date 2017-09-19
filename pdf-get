@@ -48,9 +48,9 @@ class Library(object):
         return results
 
     def print_results(self, results):
-        results_sorted = sorted(results, key=lambda k: k["year"])
+        results_sorted = sorted(results, key=lambda k: k["year"])[::-1]
 
         for item in results_sorted:
-            print(item["title"])
+            print("%-4s %-70s %4s" % ("(" + str(results_sorted.index(item)) + ")", item["title"][0:69]), item["year"])
 
 lib = Library("Art of Exploitation")
