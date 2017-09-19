@@ -10,7 +10,12 @@ class Library(object):
         q = "http://gen.lib.rus.ec/search.php?req=" + query.replace(" ", "+    ") + "&lg_topic=libgen&open=0&view=simple&res=25&phrase=0&column=def"
         r = requests.get(q).text
         soup = BeautifulSoup(r, "html.parser")
-        print(soup.find_all("tr"))
+        tr_list = soup.find_all("tr")[3:]
+
+        results = []
+
+        for tr in tr_list:
+            print(tr.find_all("td")[2])
 
 lib = Library()
 lib.search("Art of Exploitation")
