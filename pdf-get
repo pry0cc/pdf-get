@@ -72,17 +72,18 @@ class Library(object):
             print("")
         results_sorted = sorted(results, key=lambda k: k["year"])[::-1]
 
-        banner = "%-4s %-70s %4s %8s  %-10s %5s" % ("ID", "Title", "Year", "Size", "Language", "Ext")
 
         # Uncomment this to find out the offset
-        title_length = width - (len(banner) - 70)
+        title_length = width - 37
 
-        separator(len(banner))
+        banner = "%-4s %-*s %4s %8s  %-10s %5s" % ("ID", title_length, "Title", "Year", "Size", "Language", "Ext")
+        separator(width)
         print(banner)
-        separator(len(banner))
+        separator(width)
         for item in results_sorted:
             item_id = "(%s)" % (str(results_sorted.index(item)))
-            print("%-4s %-70s %4s %8s  %-10s %5s" % (item_id, item["title"][0:69], item["year"],
+            print("%-4s %-*s %4s %8s  %-10s %5s" % (item_id, title_length, item["title"][0:title_length - 1], item["year"],
             item["size"], item["language"], item["extension"]))
-        separator(len(banner))
+        separator(width)
+
 lib = Library("Art of Exploitation")
