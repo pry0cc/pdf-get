@@ -7,11 +7,6 @@ from bs4 import BeautifulSoup
 #parser.add_argument('book_name', metavar='Book', type=str,
 #                    help='da book to get')
 
-def print_results(results):
-    i = 0
-    for item in result_list:
-        print "" + str(i) + item['title'] + item['year']
-
 
 class Library(object):
     def __init__(self, query):
@@ -52,14 +47,10 @@ class Library(object):
 
         return results
 
-
-if __name__=="__main__":
-    lib = Library()
-    print(lib.search("Art of Exploitation"))
     def print_results(self, results):
         results_sorted = sorted(results, key=lambda k: k["year"])[::-1]
 
         for item in results_sorted:
-            print("%-4s %-70s %4s" % ("(" + str(results_sorted.index(item)) + ")", item["title"][0:69]), item["year"])
+            print("%-4s %-70s %" % ("(" + str(results_sorted.index(item)) + ")", item["title"][0:69]), item["year"])
 
 lib = Library("Art of Exploitation")
