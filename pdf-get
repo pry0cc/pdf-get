@@ -14,8 +14,12 @@ def print_results(results):
 
 
 class Library(object):
-    def __init__(self):
+    def __init__(self, query):
         self.url = "http://gen.lib.rus.ec/"
+
+        results = self.search(query)
+        self.print_results(results)
+
     def search(self, query):
         q = "http://gen.lib.rus.ec/search.php?req=" + query.replace(" ", "+    ") + "&lg_topic=libgen&open=0&view=simple&res=25&phrase=0&column=def"
         r = requests.get(q).text
@@ -52,3 +56,10 @@ class Library(object):
 if __name__=="__main__":
     lib = Library()
     print(lib.search("Art of Exploitation"))
+    def print_results(self, results):
+        results_sorted = sorted(results, key=lambda k: k["year"])
+
+        for item in results_sorted:
+            print(item["title"])
+
+lib = Library("Art of Exploitation")
