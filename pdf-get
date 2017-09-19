@@ -4,6 +4,10 @@ import requests
 from requests import get
 from bs4 import BeautifulSoup
 import sys
+import shutil
+
+width = (shutil.get_terminal_size().columns)
+
 
 #parser = argp.ArgumentParser(description='Get some bookz')
 #parser.add_argument('book_name', metavar='Book', type=str,
@@ -66,14 +70,14 @@ class Library(object):
                 sys.stdout.write("-")
                 sys.stdout.flush()
             print("")
-
         results_sorted = sorted(results, key=lambda k: k["year"])[::-1]
 
         banner = "%-4s %-70s %4s %8s  %-10s %5s" % ("ID", "Title", "Year", "Size", "Language", "Ext")
 
         # Uncomment this to find out the offset
-        # print(len(banner) - 70)
+        title_length = width - (len(banner) - 70)
 
+        separator(len(banner))
         print(banner)
         separator(len(banner))
         for item in results_sorted:
