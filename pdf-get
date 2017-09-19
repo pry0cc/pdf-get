@@ -7,9 +7,10 @@ from bs4 import BeautifulSoup
 #parser.add_argument('book_name', metavar='Book', type=str,
 #                    help='da book to get')
 
-def print_results(result_list):
-    for result in result_list:
-        print result.a.text
+def print_results(results):
+    i = 0
+    for item in result_list:
+        print "" + str(i) + item['title'] + item['year']
 
 
 class Library(object):
@@ -46,5 +47,8 @@ class Library(object):
                 pass
 
         return results
-lib = Library()
-print(lib.search("Art of Exploitation"))
+
+
+if __name__=="__main__":
+    lib = Library()
+    print(lib.search("Art of Exploitation"))
