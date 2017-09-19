@@ -21,10 +21,18 @@ class Library(object):
 
         for tr in tr_list:
             item = {}
-            # Sorry for this... If you can find a better way, please do without screwing it up.
-            t = BeautifulSoup(str(tr.find_all("td")[2]).split("<font")[0]+"</a></td>", "html.parser")
-            item["title"] = t.a.text
-            item["url"] = t.a.get("href")
+            try:
+                td_list = tr.find_all("td")
+                # Sorry for this... If you can find a better way, please do without screwing it up.
+                t = BeautifulSoup(str(td_list[2]).split("<font")[0]+"</a></td>", "html.parser")
+                item["title"] = t.a.text
+                item["url"] = t.a.get("href")
+                item["year"] = int(td_list[4].text)
+                print(td_list[5])
+            except Exception as e:
+                print("Mad errors!")
+            else:
+                pass
 
 lib = Library()
 lib.search("Art of Exploitation")
