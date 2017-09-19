@@ -7,6 +7,10 @@ from bs4 import BeautifulSoup
 #parser.add_argument('book_name', metavar='Book', type=str,
 #                    help='da book to get')
 
+def print_results(result_list):
+    for result in result_list:
+        print result.a.text 
+
 
 class Library(object):
     def __init__(self):
@@ -29,10 +33,15 @@ class Library(object):
                 item["url"] = t.a.get("href")
                 item["year"] = int(td_list[4].text)
                 print(td_list[5])
+                #print_results(td_list)
             except Exception as e:
                 print("Mad errors!")
             else:
                 pass
 
-lib = Library()
-lib.search("Art of Exploitation")
+if __name__=="__main__":
+    lib = Library()
+    lib.search("Art of Exploitation")
+
+
+
