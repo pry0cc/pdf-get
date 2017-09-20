@@ -9,11 +9,9 @@ import wget
 
 width = (shutil.get_terminal_size().columns)
 
+query = " ".join(sys.argv[1:])
 
-parser = argp.ArgumentParser(description='pdf-get: The most badass way to get infomation.')
-parser.add_argument('query', type=str, help='The Book or Article you want to download.')
-args = parser.parse_args()
-print("Searching for " + args.query + "...")
+print("Searching for " + query + "...")
 
 class Library(object):
     def __init__(self, query):
@@ -106,4 +104,4 @@ class Library(object):
         separator(width)
         self.choose(results_sorted)
 
-lib = Library(args.query)
+lib = Library(query)
