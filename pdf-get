@@ -30,14 +30,15 @@ class Library(object):
                 mirrors = []
                 for i in range(9,13):
                     mirrors.append(td_list[i].a.get("href"))
-                    item["title"] = t.a.text
-                    item["url"] = t.a.get("href")
-                    item["year"] = int(td_list[4].text)
-                    item["pages"] = td_list[5].text
-                    item["language"] = td_list[6].text
-                    item["size"] = td_list[7].text
-                    item["extension"] = td_list[8].text
-                    item["mirrors"] = mirrors
+                
+                item["title"] = t.a.text
+                item["url"] = t.a.get("href")
+                item["year"] = int(td_list[4].text)
+                item["pages"] = td_list[5].text
+                item["language"] = td_list[6].text
+                item["size"] = td_list[7].text
+                item["extension"] = td_list[8].text
+                item["mirrors"] = mirrors
 
                 if item["title"] != "":
                     results.append(item)
