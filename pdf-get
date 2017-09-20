@@ -5,6 +5,7 @@ from bs4 import BeautifulSoup
 import sys
 import shutil
 import wget
+import signal
 
 class Library(object):
     def __init__(self, query):
@@ -46,21 +47,25 @@ class Library(object):
                 pass
             else:
                 pass
-
-        return results
+        if len(results) > 0:
+            return results
+        else:
+            return False
 
     def download(self, url, file_name):
         print("Saving to file %s" % (file_name))
         wget.download(url, out=file_name)
 
     def choose(self, results):
-        chosen_id = int(input("ID >> "))
-
-        item = results[chosen_id]
-
-        id = item["url"].split("?md5=")[1]
-        url = "http://libgen.io/ads.php?md5=" + id
-        filename = item["title"][0:-1] + "." + item["extension"]
+        try:
+            chosen_id = int(input("ID >> "))
+            item = results[chosen_id]
+            id = item["url"].split("?md5=")[1]
+            url = "http://libgen.io/ads.php?md5=" + id
+            filename = item["title"][0:-1] + "." + item["extension"]
+        except Exception:
+            print("Something went wrong. Is it you?")
+            sys.exit(1)
 
         print("Locating Download URL...")
         try:
@@ -70,8 +75,8 @@ class Library(object):
             print("Location failed. Is it blocked?")
             print(e)
         else:
-            print("Located! Commencing download....")
-        self.download(download_url, filename)
+            print("Commencing download....")
+            self.download(download_url, filename)
 
     def print_results(self, results):
 
@@ -80,26 +85,48 @@ class Library(object):
                 sys.stdout.write("-")
                 sys.stdout.flush()
             print("")
-        results_sorted = sorted(results, key=lambda k: k["year"])[::-1]
 
 
         # Uncomment this to find out the offset
         title_length = width - 37
 
         banner = "%-4s %-*s %4s %8s  %-10s %5s" % ("ID", title_length, "Title", "Year", "Size", "Language", "Ext")
-        separator(width)
-        print(banner)
-        separator(width)
-        for item in results_sorted:
-            item_id = "(%s)" % (str(results_sorted.index(item)))
-            print("%-4s %-*s %4s %8s  %-10s %5s" % (item_id, title_length, item["title"][0:title_length - 1], item["year"],
-            item["size"], item["language"], item["extension"]))
-        separator(width)
-        self.choose(results_sorted)
+
+        if results:
+            results_sorted = sorted(results, key=lambda k: k["year"])[::-1]
+            separator(width)
+            print(banner)
+            separator(width)
+            for item in results_sorted:
+                item_id = "(%s)" % (str(results_sorted.index(item)))
+                print("%-4s %-*s %4s %8s  %-10s %5s" % (item_id, title_length, item["title"][0:title_length - 1], item["year"],
+                item["size"], item["language"], item["extension"]))
+
+            separator(width)
+            self.choose(results_sorted)
+        else:
+            print("No results.")
 
 if __name__ == '__main__':
     width = (shutil.get_terminal_size().columns)
     query = " ".join(sys.argv[1:])
 
-    print("Searching for " + query + "...")
-    lib = Library(query)
+    def signal_handler(signal, frame):
+        print('\nQuitting...')
+        sys.exit(0)
+
+    signal.signal(signal.SIGINT, signal_handler)
+
+
+    def help():
+        print("")
+        print("Usage:   pdf-get <search query>")
+        print("Help:    pdf-get -h || --help")
+        print("Example: pdf-get Art of Exploitation")
+        print("")
+
+    if query != "" and query != "-h" and query != "--help":
+        print("Searching for " + query + "...")
+        lib = Library(query)
+    else:
+        help()
