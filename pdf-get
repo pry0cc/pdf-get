@@ -9,8 +9,6 @@ import signal
 
 class Library(object):
     def __init__(self, query):
-        self.url = "http://gen.lib.rus.ec/"
-
         results = self.search(query)
         self.print_results(results)
 
@@ -47,14 +45,11 @@ class Library(object):
                 pass
             else:
                 pass
+
         if len(results) > 0:
             return results
         else:
             return False
-
-    def download(self, url, file_name):
-        print("Saving to file %s" % (file_name))
-        wget.download(url, out=file_name)
 
     def choose(self, results):
         try:
@@ -76,7 +71,8 @@ class Library(object):
             print(e)
         else:
             print("Commencing download....")
-            self.download(download_url, filename)
+            print("Saving to file %s" % (file_name))
+            wget.download(download_url, out=filename)
 
     def print_results(self, results):
 
@@ -86,10 +82,8 @@ class Library(object):
                 sys.stdout.flush()
             print("")
 
-
         # Uncomment this to find out the offset
         title_length = width - 37
-
         banner = "%-4s %-*s %4s %8s  %-10s %5s" % ("ID", title_length, "Title", "Year", "Size", "Language", "Ext")
 
         if results:
