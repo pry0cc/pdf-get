@@ -5,14 +5,15 @@ from requests import get
 from bs4 import BeautifulSoup
 import sys
 import shutil
+import wget
 
 width = (shutil.get_terminal_size().columns)
 
 
-#parser = argp.ArgumentParser(description='Get some bookz')
-#parser.add_argument('book_name', metavar='Book', type=str,
-#                    help='da book to get')
-
+parser = argp.ArgumentParser(description='pdf-get: The most badass way to get infomation.')
+parser.add_argument('query', type=str, help='The Book or Article you want to download.')
+args = parser.parse_args()
+print("Searching for " + args.query + "...")
 
 class Library(object):
     def __init__(self, query):
@@ -47,7 +48,8 @@ class Library(object):
                 item["size"] = td_list[7].text
                 item["extension"] = td_list[8].text
                 item["mirrors"] = mirrors
-                results.append(item)
+                if item["title"] != "":
+                    results.append(item)
 
             except Exception as e:
                 pass
@@ -57,11 +59,28 @@ class Library(object):
         return results
 
     def download(self, url, file_name):
-        with open(file_name, "wb") as file:
-            response = get(url)
-            file.write(response.content)
+        print("Saving to file %s" % (file_name))
+        wget.download(url, out=file_name)
 
+    def choose(self, results):
+        chosen_id = int(input("ID >> "))
 
+        item = results[chosen_id]
+
+        id = item["url"].split("?md5=")[1]
+        url = "http://libgen.io/ads.php?md5=" + id
+        filename = item["title"][0:-1] + "." + item["extension"]
+
+        print("Locating Download URL...")
+        try:
+            soup = BeautifulSoup(requests.get(url).text, "html.parser")
+            download_url = soup.find_all("a")[1].get("href")
+        except Exception as e:
+            print("Location failed. Is it blocked?")
+            print(e)
+        else:
+            print("Located! Commencing download....")
+        self.download(download_url, filename)
 
     def print_results(self, results):
 
@@ -85,5 +104,6 @@ class Library(object):
             print("%-4s %-*s %4s %8s  %-10s %5s" % (item_id, title_length, item["title"][0:title_length - 1], item["year"],
             item["size"], item["language"], item["extension"]))
         separator(width)
+        self.choose(results_sorted)
 
-lib = Library("Art of Exploitation")
+lib = Library(args.query)
