@@ -6,12 +6,6 @@ import sys
 import shutil
 import wget
 
-width = (shutil.get_terminal_size().columns)
-
-query = " ".join(sys.argv[1:])
-
-print("Searching for " + query + "...")
-
 class Library(object):
     def __init__(self, query):
         self.url = "http://gen.lib.rus.ec/"
@@ -103,4 +97,9 @@ class Library(object):
         separator(width)
         self.choose(results_sorted)
 
-lib = Library(query)
+if __name__ == '__main__':
+    width = (shutil.get_terminal_size().columns)
+    query = " ".join(sys.argv[1:])
+
+    print("Searching for " + query + "...")
+    lib = Library(query)
