@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
-import requests
-from requests import get
-from bs4 import BeautifulSoup
-import sys
 import shutil
-import wget
 import signal
+import string
+import sys
+
+import requests
+import wget
+from bs4 import BeautifulSoup
+
 
 class Library(object):
     def __init__(self, query):
@@ -24,15 +26,13 @@ class Library(object):
             item = {}
             try:
                 td_list = tr.find_all("td")
-                # Sorry for this... If you can find a better way, please do without screwing it up.
-                t = BeautifulSoup(str(td_list[2]).split("<font")[0]+"</a></td>", "html.parser")
 
                 mirrors = []
                 for i in range(9,13):
                     mirrors.append(td_list[i].a.get("href"))
-                
-                item["title"] = t.a.text
-                item["url"] = t.a.get("href")
+
+                item["title"] = next(td_list[2].strings)
+                item["url"] = td_list.a.get("href")
                 item["year"] = int(td_list[4].text)
                 item["pages"] = td_list[5].text
                 item["language"] = td_list[6].text
@@ -56,7 +56,8 @@ class Library(object):
             item = results[chosen_id]
             id = item["url"].split("?md5=")[1]
             url = "http://libgen.io/ads.php?md5=" + id
-            filename = item["title"][0:-1] + "." + item["extension"]
+            striptitle = ''.join([l for l in item["title"][0:-1] if l not in string.punctuation])
+            filename = striptitle + "." + item["extension"]
         except Exception:
             print("Something went wrong. Is it you?")
             sys.exit(1)
