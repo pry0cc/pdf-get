@@ -6,6 +6,7 @@ import sys
 import shutil
 import wget
 import signal
+import string
 
 class Library(object):
     def __init__(self, query):
@@ -56,7 +57,8 @@ class Library(object):
             item = results[chosen_id]
             id = item["url"].split("?md5=")[1]
             url = "http://libgen.io/ads.php?md5=" + id
-            filename = item["title"][0:-1] + "." + item["extension"]
+            striptitle = ''.join([l for l in item["title"][0:-1] if l not in string.punctuation])
+            filename = striptitle + "." + item["extension"]
         except Exception:
             print("Something went wrong. Is it you?")
             sys.exit(1)
